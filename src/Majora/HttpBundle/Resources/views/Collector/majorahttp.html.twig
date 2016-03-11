@@ -1,0 +1,49 @@
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    {% set text %}
+        {# this is the content displayed when hovering the mouse over
+              the toolbar panel #}
+        <div class="sf-toolbar-info-piece">
+            <b>Method</b>
+        </div>
+
+    {% endset %}
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: true }) }}
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon"><img src="" alt=""/></span>
+        <strong>Majora HTTP</strong>
+    </span>
+{% endblock %}
+
+{% block panel %}
+{# for uri in requests #}
+    <h2><b>Majora HTTP</b></h2>
+
+    <h3>Request URI : http://uri/path/to/foo/bar</h3>
+    <table>
+        <tr>
+            <th>Content Type</th>
+            <td> Example/json </td>
+        </tr>
+        <tr>
+            <th>Api Key</th>
+        </tr>
+        <tr>
+            <th>Header</th>
+        </tr>
+        <tr>
+            <th>Execution time</th>
+        </tr>
+        <tr>
+            <th>Status code</th>
+        </tr>
+        <tr>
+            <th>Error</th>
+        </tr>
+    </table>
+    {# endfor #}
+{% endblock %}

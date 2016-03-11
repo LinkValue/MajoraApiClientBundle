@@ -1,0 +1,3 @@
+majora_http_homepage:
+    path:     /http/guzzle
+    defaults: { _controller: MajoraHttpBundle:Default:index }

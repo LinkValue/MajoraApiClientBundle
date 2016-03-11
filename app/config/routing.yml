@@ -1,0 +1,3 @@
+majora_http:
+    resource: "@MajoraHttpBundle/Resources/config/routing.yml"
+    prefix:   /

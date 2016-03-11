@@ -1,0 +1,14 @@
+parameters:
+    majora_http.guzzle_client.class: GuzzleHttp\Client
+    majora_http.custom_guzzle_client.class: Majora\HttpBundle\Services\GuzzleWrapper
+
+    majora_http.handler.curlfactory.class: Majora\HttpBundle\GuzzleHttpBundle\Handler\CurlFactory
+
+    majora_http.guzzle.proxyhandler.class: GuzzleHttp\Handler\Proxy
+    majora_http.guzzle.handlerstack.class: GuzzleHttp\HandlerStack
+
+services:
+    guzzle_wrapper:
+        class: Majora\HttpBundle\Services\GuzzleWrapper
+        arguments:
+            - ''
