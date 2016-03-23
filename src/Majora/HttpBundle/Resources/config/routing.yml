@@ -1,3 +1,7 @@
 majora_http_homepage:
     path:     /http/guzzle
     defaults: { _controller: MajoraHttpBundle:Default:index }
+
+majora_http_post_test:
+    path:     /post/test
+    defaults: { _controller: MajoraHttpBundle:Default:test }

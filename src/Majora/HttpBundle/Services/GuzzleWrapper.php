@@ -19,10 +19,6 @@ class GuzzleWrapper extends Client
      */
     public function __construct(array $config)
     {
-        $config['on_stats'] =  function (TransferStats $stats) {
-            // contient les stats
-            $stats->getHandlerStats();
-        };
         parent::__construct($config);
     }
 

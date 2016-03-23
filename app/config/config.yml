@@ -74,6 +74,7 @@ majora_http:
         velib:
             base_uri: "https://api.jcdecaux.com/vls/v1/"
             headers:
-               content_type:
+               content_type: "application/json"
                api_key:   d70eae09acd70154838abe62ddf56de93c40d55c
-            body:
+        test:
+            base_uri: "localhost:8000/post/test"

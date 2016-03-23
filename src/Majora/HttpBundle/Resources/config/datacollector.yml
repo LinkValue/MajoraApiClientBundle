@@ -4,5 +4,5 @@ services:
             public: true
             arguments: []
             tags:
-                - { name: data_collector, template: 'MajoraHttpBundle:Collector:majorahttp', id: 'majora.majora_http_collector', priority: 254}
-                - { name: kernel.event_listener, event: majora.guzzle.event, method: onRequest }
+                - { name: data_collector, template: 'MajoraHttpBundle:Collector:majorahttp', id: 'majorahttp', priority: 254}
+                - { name: kernel.event_listener, event: majora_http.event, method: onRequest }

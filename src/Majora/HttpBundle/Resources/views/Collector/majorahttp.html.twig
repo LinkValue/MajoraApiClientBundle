@@ -4,8 +4,11 @@
     {% set text %}
         {# this is the content displayed when hovering the mouse over
               the toolbar panel #}
+        {% set icon %}
+            <span class="sf-toolbar-value">MajoraHttp</span>
+        {% endset %}
         <div class="sf-toolbar-info-piece">
-            <b>Method</b>
+            <b>MajoraHttp</b>
         </div>
 
     {% endset %}
@@ -14,36 +17,73 @@
 
 {% block menu %}
     <span class="label">
-        <span class="icon"><img src="" alt=""/></span>
+        <span class="icon"></span>
         <strong>Majora HTTP</strong>
+        <span class="count">{{ collector.commands|length }}</span>
     </span>
 {% endblock %}
 
 {% block panel %}
-{# for uri in requests #}
-    <h2><b>Majora HTTP</b></h2>
 
-    <h3>Request URI : http://uri/path/to/foo/bar</h3>
-    <table>
-        <tr>
-            <th>Content Type</th>
-            <td> Example/json </td>
-        </tr>
-        <tr>
-            <th>Api Key</th>
-        </tr>
-        <tr>
-            <th>Header</th>
-        </tr>
-        <tr>
-            <th>Execution time</th>
-        </tr>
-        <tr>
-            <th>Status code</th>
-        </tr>
-        <tr>
-            <th>Error</th>
-        </tr>
-    </table>
-    {# endfor #}
+
+    <h2><b>Majora HTTP</b></h2>
+    {% for command in collector.commands %}
+
+    <span style="font-size: 16px; font-weight: bold;">Request URI </span>: {{ command.uri }}<br>
+        <br>
+        <b>REQUEST</b>
+        <table>
+            <thead>
+                <th>Method</th>
+                <th>Content-Type</th>
+                <th>Host</th>
+                <th>ApiKey</th>
+            </thead>
+            <td>
+                {{ command.method }}
+            </td>
+            <td>
+                {% if command.headers['Content-Type'][0]  is defined %}
+                    {{ command.headers['Content-Type'][0] }}
+                {% else %}
+                    null
+                {% endif %}
+            </td>
+            <td>
+                {{ command.headers['Host'][0] }}
+            </td>
+            <td>
+                {{ command.headers['api_key'][0] }}
+            </td>
+        </table>
+
+
+        <b>RESPONSE</b>
+        <table>
+            <thead>
+            <th>Status Code</th>
+            <th>Message</th>
+            <th>Execution Time</th>
+            </thead>
+
+            <td>
+                {{ command.statusCode }}
+            </td>
+            <td>
+                {{ command.reasonPhrase}}</td>
+            </td>
+            <td>
+                {{ command.executionTime }} ms
+            </td>
+        </table>
+        <table>
+            <thead>
+            <th>Body</th>
+            </thead>
+            <td>
+                {{ command.responseBody|slice(0,100)|json_encode }}
+            </td>
+        </table>
+    {% endfor %}
+
 {% endblock %}
