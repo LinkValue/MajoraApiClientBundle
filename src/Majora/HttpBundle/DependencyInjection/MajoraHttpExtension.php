@@ -31,7 +31,7 @@ class MajoraHttpExtension extends Extension
             $container,
             new FileLocator(__DIR__.'/../Resources/config')
         );
-        $loader->load('services.xml'); //xml
+        $loader->load('services.xml');
 
         if (!$container->hasDefinition('guzzle_wrapper')) {
             return;
