@@ -9,7 +9,7 @@ use GuzzleHttp\PrepareBodyMiddleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Majora\HttpBundle\Event\MajoraHttpEvent;
+use Majora\HttpBundle\Event\HttpRequestEvent;
 use Symfony\Component\Stopwatch\Stopwatch;
 
 class MajoraEventDispatcher
@@ -85,10 +85,7 @@ class MajoraEventDispatcher
     protected function initEvent(RequestInterface $request)
     {
         $this->stopWatch->start('majoraEvent.'.$this->clientId);
-        $event = new MajoraHttpEvent();
-        $event->setRequest($request);
-        $event->setExecutionStart();
-        $event->setClientId($this->clientId);
+        $event = new HttpRequestEvent($request, $this->clientId);
         $this->event = $event;
     }
 
@@ -100,8 +97,8 @@ class MajoraEventDispatcher
         $this->event->setResponse($response);
         $this->event->setReason($response->getReasonPhrase());
         $this->stopWatch->stop('majoraEvent.'.$this->clientId);
-        $this->event->setExecutionStop($this->stopWatch->getEvent('majoraEvent.'.$this->clientId)->getDuration());
-        $this->eventDispatcher->dispatch(MajoraHttpEvent::EVENT_NAME, $this->event);
+        $this->event->setExecutionTime($this->stopWatch->getEvent('majoraEvent.'.$this->clientId)->getDuration());
+        $this->eventDispatcher->dispatch(HttpRequestEvent::EVENT_NAME, $this->event);
     }
 
 }

@@ -3,6 +3,7 @@
 namespace  Majora\HttpBundle\DataCollector;
 
 
+use Majora\HttpBundle\Event\HttpRequestEvent;
 use Majora\HttpBundle\Event\MajoraHttpEvent;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +48,7 @@ class MajoraHttpDataCollector extends DataCollector
     /**
      * @param MajoraHttpEvent $event
      */
-    public function onRequest(MajoraHttpEvent $event)
+    public function onRequest(HttpRequestEvent $event)
     {
         $request = $event->getRequest();
         $response = $event->getResponse();

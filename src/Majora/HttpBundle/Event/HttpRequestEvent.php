@@ -9,17 +9,10 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class MajoraHttpEvent extends Event
+class HttpRequestEvent extends Event
 {
     const EVENT_NAME = 'majora_http.event';
 
-
-    /**
-     * Command start time
-     *
-     * @var float
-     */
-    protected $executionStart;
     /**
      * Command execution time
      *
@@ -34,32 +27,23 @@ class MajoraHttpEvent extends Event
      * @var Response
      */
     protected $response;
+
     /**
      * @var mixed
      */
     protected $reason;
+
     /**
      * @var string
      */
     protected $clientId;
 
-    public function __construct()
+    public function __construct(RequestInterface $request, $clientId)
     {
-
+        $this->request= $request;
+        $this->clientId = $clientId;
     }
 
-    /**
-     * Set request
-     *
-     * @param Request $request
-     *
-     * @return $this
-     */
-    public function setRequest(RequestInterface $request)
-    {
-        $this->request = $request;
-        return $this;
-    }
     /**
      * Return request
      *
@@ -90,6 +74,7 @@ class MajoraHttpEvent extends Event
     {
         return $this->response;
     }
+
     /**
      * Set reason
      *
@@ -102,6 +87,7 @@ class MajoraHttpEvent extends Event
         $this->reason = $reason;
         return $this;
     }
+
     /**
      * Return reason
      *
@@ -111,36 +97,7 @@ class MajoraHttpEvent extends Event
     {
         return $this->reason;
     }
-    /**
-     * @return float
-     */
-    public function getExecutionStart()
-    {
-        return $this->executionStart;
-    }
-    /**
-     * Set execution start of a request
-     *
-     * @return GuzzleHttpEvent
-     */
-    public function setExecutionStart()
-    {
-        $this->executionStart = microtime(true);
 
-        return $this;
-    }
-    /**
-     * Stop the execution of a request
-     * and set the request execution time
-     *
-     * @return GuzzleHttpEvent
-     */
-    public function setExecutionStop($time)
-    {
-        $this->executionTime = $time;
-
-        return $this;
-    }
     /**
      * @return float
      */
@@ -148,34 +105,10 @@ class MajoraHttpEvent extends Event
     {
         return $this->executionTime;
     }
-    /**
-     * Return execution time in milliseconds
-     *
-     * @return float
-     */
-    public function getTiming()
+
+
+    public function setExecutionTime($time)
     {
-        return $this->getExecutionTime() * 1000;
-    }
-    /**
-     * Get client ID
-     *
-     * @return string
-     */
-    public function getClientId()
-    {
-        return $this->clientId;
-    }
-    /**
-     * Set client ID
-     *
-     * @param string $clientId
-     *
-     * @return GuzzleHttpEvent
-     */
-    public function setClientId($clientId)
-    {
-        $this->clientId = $clientId;
-        return $this;
+        $this->executionTime = $time;
     }
 }
