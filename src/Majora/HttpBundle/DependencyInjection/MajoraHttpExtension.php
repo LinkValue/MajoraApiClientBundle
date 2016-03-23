@@ -43,9 +43,6 @@ class MajoraHttpExtension extends Extension
         }
 
 
-        $guzzleClientDefintion = new Definition('Majora\HttpBundle\Services\GuzzleWrapper');
-        $guzzleClientDefintion->addArgument($config);
-
         // Toolbar
         if ($container->getParameter('kernel.debug')) {
             $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -61,9 +58,7 @@ class MajoraHttpExtension extends Extension
     public function createClient(ContainerBuilder $container, $clientId, array $clientConfig)
     {
 
-        $handlerStackDefinition = new Definition('\GuzzleHttp\Handler\CurlHandler');
-        $handlerStackDefinition->setFactory(['GuzzleHttp\HandlerStack', 'create']);
-        $container->setDefinition('majora_http.handler.'.$clientId, $handlerStackDefinition);
+        $container->setDefinition('majora_http.handler.'.$clientId, $container->getDefinition('guzzle.curl_handler'));
 
         $handlerStackReference = new Reference('majora_http.handler.'.$clientId);
 

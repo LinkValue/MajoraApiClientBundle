@@ -5,6 +5,9 @@
     <services>
         <service id="guzzle_wrapper" class="Majora\HttpBundle\Services\GuzzleWrapper">
         </service>
+        <service id="guzzle.curl_handler" class="GuzzleHttp\Handler\CurlHandler">
+            <factory class="GuzzleHttp\HandlerStack" method="create"/>
+        </service>
     </services>
 </container>
 
