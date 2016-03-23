@@ -42,7 +42,10 @@ class MajoraEventDispatcher
        // var_dump($this->eventDispatcher, $this->clientId, $this->stopWatch);
     }
 
-
+    /**
+     * @param HandlerStack $stack
+     * @return HandlerStack
+     */
     public function push(HandlerStack $stack)
     {
         $stack->push(Middleware::mapRequest(function (RequestInterface $request) {
@@ -89,7 +92,9 @@ class MajoraEventDispatcher
         $this->event = $event;
     }
 
-
+    /**
+     * @param ResponseInterface $response
+     */
     protected function dispatchEvent(ResponseInterface $response)
     {
         $this->event->setResponse($response);

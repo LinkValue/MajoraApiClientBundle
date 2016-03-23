@@ -16,7 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
 class MajoraHttpDataCollector extends DataCollector
 {
 
-
+    /**
+     * MajoraHttpDataCollector constructor.
+     */
     public function __construct()
     {
         $this->data['majoraHttp'] = [
@@ -24,16 +26,27 @@ class MajoraHttpDataCollector extends DataCollector
         ];
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param \Exception|null $exception
+     */
     function collect(Request $request, Response $response, \Exception $exception = null)
     {
 
     }
 
+    /**
+     * @return string
+     */
     function getName()
     {
         return "majorahttp";
     }
 
+    /**
+     * @param MajoraHttpEvent $event
+     */
     public function onRequest(MajoraHttpEvent $event)
     {
         $request = $event->getRequest();

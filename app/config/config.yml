@@ -70,11 +70,9 @@ swiftmailer:
 majora_http:
     clients:
         defaults:
-            base_uri: "titi/tata"
+            base_uri: titi/tata
         velib:
-            base_uri: "https://api.jcdecaux.com/vls/v1/"
+            base_uri: https://api.jcdecaux.com/vls/v1/
             headers:
-               content_type: "application/json"
+               content_type: application/json
                api_key:   d70eae09acd70154838abe62ddf56de93c40d55c
-        test:
-            base_uri: "localhost:8000/post/test"
