@@ -2,6 +2,8 @@
 
 namespace Majora\HttpBundle\DependencyInjection;
 
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\HandlerStack;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
@@ -25,11 +27,11 @@ class MajoraHttpExtension extends Extension
         $configuration = new Configuration();
 
         $config = $this->processConfiguration($configuration, $configs);
-        $loader = new YamlFileLoader(
+        $loader = new Loader\XmlFileLoader(
             $container,
             new FileLocator(__DIR__.'/../Resources/config')
         );
-        $loader->load('services.yml');
+        $loader->load('services.xml');
 
         if (!$container->hasDefinition('guzzle_wrapper')) {
             return;
@@ -41,16 +43,11 @@ class MajoraHttpExtension extends Extension
         }
 
 
-        $guzzleDefinition = $container->getDefinition('guzzle_wrapper');
-
-        $guzzleDefinition->replaceArgument(0, $config);
-
         // Toolbar
         if ($container->getParameter('kernel.debug')) {
-            $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('datacollector.yml');
+            $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+            $loader->load('datacollector.xml');
         }
-
     }
 
     /**
@@ -60,10 +57,21 @@ class MajoraHttpExtension extends Extension
      */
     public function createClient(ContainerBuilder $container, $clientId, array $clientConfig)
     {
+        $container->setDefinition(sprintf('majora_http.handler.%s', $clientId), $container->getDefinition('guzzle.curl_handler'));
+        $handlerStackReference = new Reference(sprintf('majora_http.handler.%s', $clientId));
 
-        $guzzleClient= new Definition('%majora_http.custom_guzzle_client.class%');
-        $guzzleClient->addArgument($clientConfig);
+        $container->getDefinition(sprintf('majora_http.handler.%s', $clientId));
 
-        $container->setDefinition('guzzle_http.'.$clientId , $guzzleClient);
+        //Middleware
+        $eventDispatcher = $container->getDefinition('majora.http_eventdispatcher');
+        $eventDispatcher->replaceArgument(2, $clientId);
+        $eventDispatcher->addMethodCall('push', [$handlerStackReference]);
+
+        $clientConfig['handler'] = $handlerStackReference;
+        $clientConfig['middleware'] = $eventDispatcher;
+
+        $guzzleClient= $container->getDefinition('guzzle_wrapper');
+        $guzzleClient->replaceArgument(0, $clientConfig);
+        $container->setDefinition(sprintf('guzzle_http.%s', $clientId) , $guzzleClient);
     }
 }
