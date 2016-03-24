@@ -57,9 +57,8 @@ class MajoraHttpExtension extends Extension
      */
     public function createClient(ContainerBuilder $container, $clientId, array $clientConfig)
     {
-        $handlerDefinition = $container->setDefinition(sprintf('majora_http.handler.%s', $clientId), $container->getDefinition('guzzle.curl_handler'));
+        $container->setDefinition(sprintf('majora_http.handler.%s', $clientId), $container->getDefinition('guzzle.curl_handler'));
         $handlerStackReference = new Reference(sprintf('majora_http.handler.%s', $clientId));
-
 
         $container->getDefinition(sprintf('majora_http.handler.%s', $clientId));
 
