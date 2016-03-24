@@ -63,6 +63,7 @@ class HttpRequestEvent extends Event
     public function setResponse(ResponseInterface $response)
     {
         $this->response = $response;
+        $this->reason = $this->response->getReasonPhrase();
         return $this;
     }
     /**
@@ -75,28 +76,6 @@ class HttpRequestEvent extends Event
         return $this->response;
     }
 
-    /**
-     * Set reason
-     *
-     * @param mixed $reason
-     *
-     * @return $this
-     */
-    public function setReason($reason)
-    {
-        $this->reason = $reason;
-        return $this;
-    }
-
-    /**
-     * Return reason
-     *
-     * @return mixed
-     */
-    public function getReason()
-    {
-        return $this->reason;
-    }
 
     /**
      * @return float

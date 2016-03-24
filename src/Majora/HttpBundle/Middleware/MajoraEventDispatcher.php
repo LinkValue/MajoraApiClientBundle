@@ -95,7 +95,6 @@ class MajoraEventDispatcher
     protected function dispatchEvent(ResponseInterface $response)
     {
         $this->event->setResponse($response);
-        $this->event->setReason($response->getReasonPhrase());
         $this->stopWatch->stop('majoraEvent.'.$this->clientId);
         $this->event->setExecutionTime($this->stopWatch->getEvent('majoraEvent.'.$this->clientId)->getDuration());
         $this->eventDispatcher->dispatch(HttpRequestEvent::EVENT_NAME, $this->event);
