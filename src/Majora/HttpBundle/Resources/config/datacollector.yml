@@ -1,8 +1,0 @@
-services:
-    majora.http_collector:
-            class: Majora\HttpBundle\DataCollector\MajoraHttpDataCollector
-            public: true
-            arguments: []
-            tags:
-                - { name: data_collector, template: 'MajoraHttpBundle:Collector:majorahttp', id: 'majorahttp', priority: 254}
-                - { name: kernel.event_listener, event: majora_http.event, method: onRequest }

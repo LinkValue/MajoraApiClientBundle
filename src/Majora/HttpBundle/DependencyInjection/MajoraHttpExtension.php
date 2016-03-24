@@ -45,8 +45,8 @@ class MajoraHttpExtension extends Extension
 
         // Toolbar
         if ($container->getParameter('kernel.debug')) {
-            $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-            $loader->load('datacollector.yml');
+            $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+            $loader->load('datacollector.xml');
         }
     }
 
@@ -57,24 +57,22 @@ class MajoraHttpExtension extends Extension
      */
     public function createClient(ContainerBuilder $container, $clientId, array $clientConfig)
     {
+        $handlerDefinition = $container->setDefinition(sprintf('majora_http.handler.%s', $clientId), $container->getDefinition('guzzle.curl_handler'));
+        $handlerStackReference = new Reference(sprintf('majora_http.handler.%s', $clientId));
 
-        $container->setDefinition('majora_http.handler.'.$clientId, $container->getDefinition('guzzle.curl_handler'));
 
-        $handlerStackReference = new Reference('majora_http.handler.'.$clientId);
+        $container->getDefinition(sprintf('majora_http.handler.%s', $clientId));
 
         //Middleware
-        $eventDispatcher = new Definition('Majora\HttpBundle\Middleware\MajoraEventDispatcher');
-        $eventDispatcher->setArguments([new Reference('debug.stopwatch'), new Reference('event_dispatcher'), $clientId]);
+        $eventDispatcher = $container->getDefinition('majora.http_eventdispatcher');
+        $eventDispatcher->replaceArgument(2, $clientId);
         $eventDispatcher->addMethodCall('push', [$handlerStackReference]);
-
 
         $clientConfig['handler'] = $handlerStackReference;
         $clientConfig['middleware'] = $eventDispatcher;
 
-        $guzzleClient= new Definition('Majora\HttpBundle\Services\GuzzleWrapper');
-        $guzzleClient->addArgument($clientConfig);
-
-        $container->setDefinition('guzzle_http.'.$clientId , $guzzleClient);
+        $guzzleClient= $container->getDefinition('guzzle_wrapper');
+        $guzzleClient->replaceArgument(0, $clientConfig);
+        $container->setDefinition(sprintf('guzzle_http.%s', $clientId) , $guzzleClient);
     }
-
 }

@@ -69,7 +69,8 @@ class MajoraEventDispatcher
                         return $response;
                     },
                     function (\Exception $reason) use ($request) {
-                        $this->dispatchEvent($request);
+                        var_dump($reason);
+                        $this->dispatchEvent($reason);
                         throw $reason;
                     }
                 );
